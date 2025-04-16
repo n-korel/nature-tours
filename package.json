@@ -5,7 +5,7 @@
 	"main": "app.js",
 	"scripts": {
 		"start": "nodemon server.js",
-		"start:prod": "set NODE_ENV=production && nodemon server.js",
+		"start:prod": "cross-env NODE_ENV=production nodemon server.js",
 		"debug": "ndb server.js"
 	},
 	"author": "Nick Korelskiy",
@@ -19,6 +19,7 @@
 		"validator": "^13.15.0"
 	},
 	"devDependencies": {
+		"cross-env": "^7.0.3",
 		"eslint": "^8.57.1",
 		"eslint-config-airbnb": "^19.0.4",
 		"eslint-config-prettier": "^10.1.2",
