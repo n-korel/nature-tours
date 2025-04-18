@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
+import config from './config.js';
 import app from './app.js';
 
 process.on('unhandledException', (err) => {
@@ -8,9 +8,7 @@ process.on('unhandledException', (err) => {
 	process.exit(1);
 });
 
-dotenv.config({ path: './config.env' });
-
-const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD);
+const DB = config.DATABASE.replace('<PASSWORD>', config.DATABASE_PASSWORD);
 
 mongoose
 	.connect(DB, {
@@ -21,9 +19,8 @@ mongoose
 	})
 	.then(() => console.log('DB connection successful'));
 
-const port = process.env.PORT || 3000;
-const server = app.listen(port, () => {
-	console.log(`App running on port ${port}...`);
+const server = app.listen(config.PORT, () => {
+	console.log(`App running on port ${config.PORT}...`);
 });
 
 process.on('unhandledRejection', (err) => {
