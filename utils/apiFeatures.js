@@ -1,4 +1,4 @@
-class APIFeatures {
+export default class APIFeatures {
 	constructor(query, queryString) {
 		this.query = query; //query mongoose
 		this.queryString = queryString; //query express
@@ -49,5 +49,3 @@ class APIFeatures {
 		return this;
 	}
 }
-
-module.exports = APIFeatures;

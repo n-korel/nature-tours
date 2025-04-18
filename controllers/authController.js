@@ -1,7 +1,7 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/userModel');
-const catchAsync = require('../utils/catchAsync');
-const AppError = require('../utils/appError');
+import jwt from 'jsonwebtoken';
+import catchAsync from '../utils/catchAsync.js';
+import User from '../models/userModel.js';
+import AppError from '../utils/appError.js';
 
 const signToken = (id) => {
 	return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -9,7 +9,7 @@ const signToken = (id) => {
 	});
 };
 
-exports.signup = catchAsync(async (req, res, next) => {
+export const signup = catchAsync(async (req, res, next) => {
 	const newUser = await User.create({
 		name: req.body.name,
 		email: req.body.email,
@@ -28,7 +28,7 @@ exports.signup = catchAsync(async (req, res, next) => {
 	});
 });
 
-exports.login = catchAsync(async (req, res, next) => {
+export const login = catchAsync(async (req, res, next) => {
 	const { email, password } = req.body;
 
 	// 1.Check email and password exist
@@ -51,7 +51,7 @@ exports.login = catchAsync(async (req, res, next) => {
 	});
 });
 
-exports.protect = catchAsync(async (req, res, next) => {
+export const protect = catchAsync(async (req, res, next) => {
 	// 1.Getting token and check of it's there
 	let token;
 	if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
