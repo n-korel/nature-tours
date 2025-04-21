@@ -1,5 +1,12 @@
 import express from 'express';
-import { signup, login, forgotPassword, resetPassword } from '../controllers/authController.js';
+import {
+	signup,
+	login,
+	forgotPassword,
+	resetPassword,
+	updatePassword,
+	protect,
+} from '../controllers/authController.js';
 import {
 	getAllUsers,
 	createUser,
@@ -14,7 +21,9 @@ router.post('/signup', signup);
 router.post('/login', login);
 
 router.post('/forgotPassword', forgotPassword);
-router.post('/resetPassword', resetPassword);
+router.patch('/resetPassword/:token', resetPassword);
+
+router.patch('/updateMyPassword', protect, updatePassword);
 
 router.route('/').get(getAllUsers).post(createUser);
 
