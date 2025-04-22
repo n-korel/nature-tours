@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
 		type: String,
 		required: [true, 'Please confirm your password'],
 		validate: {
-			// Сравнивает passwordConfirm с password
+			// This only works on .create and .save
 			validator: function (el) {
 				return el === this.password;
 			},
@@ -41,8 +41,14 @@ const userSchema = new mongoose.Schema({
 	passwordChangedAt: Date,
 	passwordResetToken: String,
 	passwordResetExpires: Date,
+	active: {
+		type: Boolean,
+		dafault: true,
+		select: false,
+	},
 });
 
+// This only works on .create and .save
 userSchema.pre('save', async function (next) {
 	if (!this.isModified('password')) return next();
 
@@ -51,12 +57,18 @@ userSchema.pre('save', async function (next) {
 	next();
 });
 
+// This only works on .create and .save
 userSchema.pre('save', function (next) {
 	if (!this.isModified('password') || this.isNew) {
 		return next();
 	}
 
 	this.passwordChangedAt = Date.now() - 1000;
+	next();
+});
+
+userSchema.pre(/^find/, function (next) {
+	this.find({ active: { $ne: false } });
 	next();
 });
 
