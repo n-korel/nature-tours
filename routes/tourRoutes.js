@@ -10,8 +10,12 @@ import {
 	getMonthlyPlan,
 } from '../controllers/tourController.js';
 import { protect, restrictTo } from '../controllers/authController.js';
+import reviewRouter from './reviewRoutes.js';
 
 const router = express.Router();
+
+// Nested routes
+router.use('/:tourId/reviews', reviewRouter);
 
 router.route('/top-5-cheap').get(aliasTopTours, getAllTours);
 
