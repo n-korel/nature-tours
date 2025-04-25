@@ -1,25 +1,7 @@
 import Review from '../models/reviewModel.js';
-import catchAsync from '../utils/catchAsync.js';
-import factory from './handlerFactory.js';
+import { createOne, deleteOne, getAll, getOne, updateOne } from './handlerFactory.js';
 
-export const getAllReviews = catchAsync(async (req, res) => {
-	let filter = {};
-	if (req.params.tourId) {
-		filter = { tour: req.params.tourId };
-	}
-
-	const reviews = await Review.find(filter);
-
-	res.status(200).json({
-		status: 'success',
-		results: reviews.length,
-		data: {
-			reviews,
-		},
-	});
-});
-
-export const createReview = catchAsync(async (req, res, next) => {
+export const setTourUserIds = (req, res, next) => {
 	// Allow nested routes
 	if (!req.body.tour) {
 		req.body.tour = req.params.tourId;
@@ -27,15 +9,11 @@ export const createReview = catchAsync(async (req, res, next) => {
 	if (!req.body.user) {
 		req.body.user = req.user.id;
 	}
+	next();
+};
 
-	const newReview = await Review.create(req.body);
-
-	res.status(201).json({
-		status: 'success',
-		data: {
-			review: newReview,
-		},
-	});
-});
-
-export const deleteReview = factory(Review);
+export const getAllReviews = getAll(Review);
+export const getReview = getOne(Review);
+export const createReview = createOne(Review);
+export const updateReview = updateOne(Review);
+export const deleteReview = deleteOne(Review);

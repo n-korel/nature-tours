@@ -1,7 +1,7 @@
 import catchAsync from '../utils/catchAsync.js';
 import User from '../models/userModel.js';
 import AppError from '../utils/appError.js';
-import factory from './handlerFactory.js';
+import { deleteOne, getAll, getOne, updateOne } from './handlerFactory.js';
 
 const filterObj = (obj, ...allowedFields) => {
 	const newObj = {};
@@ -13,17 +13,10 @@ const filterObj = (obj, ...allowedFields) => {
 	return newObj;
 };
 
-export const getAllUsers = catchAsync(async (req, res) => {
-	const users = await User.find();
-
-	res.status(200).json({
-		status: 'success',
-		results: users.length,
-		data: {
-			users,
-		},
-	});
-});
+export const getMe = (req, res, next) => {
+	req.params.id = req.user.id;
+	next();
+};
 
 export const updateMe = catchAsync(async (req, res, next) => {
 	// 1. Create error if user POSTs password data
@@ -59,25 +52,16 @@ export const deleteMe = catchAsync(async (req, res, next) => {
 	});
 });
 
-export const getUser = (req, res) => {
-	res.status(500).json({
-		status: 'error',
-		message: 'This route is not yet defined!',
-	});
-};
-
 export const createUser = (req, res) => {
 	res.status(500).json({
 		status: 'error',
-		message: 'This route is not yet defined!',
+		message: 'This route is not defined! Please use /signup instead',
 	});
 };
 
-export const updateUser = (req, res) => {
-	res.status(500).json({
-		status: 'error',
-		message: 'This route is not yet defined!',
-	});
-};
-
-export const deleteUser = factory(User);
+export const getUser = getOne(User);
+export const getAllUsers = getAll(User);
+// Do not update password with update (findByIdAndUpdate) only work for .create or .save
+// save middleware is not run
+export const updateUser = updateOne(User);
+export const deleteUser = deleteOne(User);
