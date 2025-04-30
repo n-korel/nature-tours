@@ -2,7 +2,7 @@ import Tour from '../models/tourModel.js';
 // import AppError from '../utils/appError.js';
 import catchAsync from '../utils/catchAsync.js';
 
-export const getOverview = catchAsync(async (req, res) => {
+export const getOverview = catchAsync(async (req, res, next) => {
 	// 1. Get tour data from colletction
 	const tours = await Tour.find();
 
@@ -16,7 +16,7 @@ export const getOverview = catchAsync(async (req, res) => {
 	});
 });
 
-export const getTour = catchAsync(async (req, res) => {
+export const getTour = catchAsync(async (req, res, next) => {
 	// 1. Get tour data from colletction
 	const tour = await Tour.findOne({ slug: req.params.slug }).populate({
 		path: 'reviews',
@@ -32,3 +32,9 @@ export const getTour = catchAsync(async (req, res) => {
 		tour,
 	});
 });
+
+export const getLoginForm = (req, res) => {
+	res.status(200).render('login', {
+		title: 'Log into your account',
+	});
+};

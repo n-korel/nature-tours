@@ -7,6 +7,7 @@ import helmet from 'helmet';
 import mongoSanitize from 'express-mongo-sanitize';
 import xss from 'xss-clean';
 import hpp from 'hpp';
+import cookieParser from 'cookie-parser';
 
 import config from './config.js';
 import AppError from './utils/appError.js';
@@ -31,7 +32,18 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Set security HTTP headers
-app.use(helmet());
+// app.use(helmet());
+app.use(
+	helmet.contentSecurityPolicy({
+		directives: {
+			defaultSrc: ["'self'"],
+			scriptSrc: ["'self'", "'unsafe-inline'", 'https://unpkg.com'],
+			styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com', 'https://unpkg.com'],
+			fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+			imgSrc: ["'self'", 'data:', 'https://api.maptiler.com', 'https://unpkg.com'],
+		},
+	}),
+);
 
 // Development logging
 if (config.NODE_ENV === 'development') {
@@ -48,6 +60,7 @@ app.use('/api', limiter);
 
 // Body parser, reading from body into req.body
 app.use(express.json({ limit: '10kb' }));
+app.use(cookieParser());
 
 // Data sanitization against NOSQL query injection
 app.use(mongoSanitize());
@@ -72,6 +85,7 @@ app.use(
 // Test middleware
 app.use((req, res, next) => {
 	req.requestTime = new Date().toISOString();
+	console.log(req.cookies);
 	next();
 });
 
