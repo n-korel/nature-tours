@@ -37,10 +37,23 @@ app.use(
 	helmet.contentSecurityPolicy({
 		directives: {
 			defaultSrc: ["'self'"],
-			scriptSrc: ["'self'", "'unsafe-inline'", 'https://unpkg.com'],
-			styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com', 'https://unpkg.com'],
+			scriptSrc: ["'self'", "'unsafe-inline'", 'https://unpkg.com', 'https://cdn.jsdelivr.net'],
+			styleSrc: [
+				"'self'",
+				"'unsafe-inline'",
+				'https://fonts.googleapis.com',
+				'https://unpkg.com',
+				'https://cdn.jsdelivr.net',
+			],
 			fontSrc: ["'self'", 'https://fonts.gstatic.com'],
-			imgSrc: ["'self'", 'data:', 'https://api.maptiler.com', 'https://unpkg.com'],
+			imgSrc: [
+				"'self'",
+				'data:',
+				'https://api.maptiler.com',
+				'https://unpkg.com',
+				'https://cdn.jsdelivr.net',
+			],
+			connectSrc: ["'self'", 'http://127.0.0.1:3000', 'ws://localhost:51709'],
 		},
 	}),
 );

@@ -1,6 +1,9 @@
 extends base
 include _reviewCard
 
+//- block append head
+    //- script(src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js')
+    //- link(rel='stylesheet' href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css')
 
 mixin overviewBox(label, text, icon)
     .overview-box__detail
@@ -87,8 +90,8 @@ block content
 
 
 
-block append scripts
-    script.
+//- block append scripts
+//-     script.
         document.addEventListener('DOMContentLoaded', () => {
         const mapEl = document.getElementById('map');
         if (!mapEl) return;
