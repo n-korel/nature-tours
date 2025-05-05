@@ -18,6 +18,8 @@ import {
 	updateMe,
 	deleteMe,
 	getMe,
+	uploadUserPhoto,
+	resizePhoto,
 } from '../controllers/userController.js';
 
 const router = express.Router();
@@ -34,7 +36,7 @@ router.use(protect);
 router.patch('/updateMyPassword', updatePassword);
 
 router.get('/me', getMe, getUser);
-router.patch('/updateMe', updateMe);
+router.patch('/updateMe', uploadUserPhoto, resizePhoto, updateMe);
 router.delete('/deleteMe', deleteMe);
 
 // only after this, all bottom routes need to be the admin (sequence middleware)
