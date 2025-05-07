@@ -1,6 +1,6 @@
 import express from 'express';
 import { protect } from '../controllers/authController.js';
-import getCheckoutSesion from '../controllers/bookingController.js';
+import { getCheckoutSesion } from '../controllers/bookingController.js';
 
 const router = express.Router();
 
