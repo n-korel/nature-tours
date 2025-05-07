@@ -16,6 +16,7 @@ import tourRouter from './routes/tourRoutes.js';
 import userRouter from './routes/userRoutes.js';
 import reviewRouter from './routes/reviewRoutes.js';
 import viewRoutes from './routes/viewRoutes.js';
+import bookingRouter from './routes/bookingRoutes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -37,7 +38,13 @@ app.use(
 	helmet.contentSecurityPolicy({
 		directives: {
 			defaultSrc: ["'self'"],
-			scriptSrc: ["'self'", "'unsafe-inline'", 'https://unpkg.com', 'https://cdn.jsdelivr.net'],
+			scriptSrc: [
+				"'self'",
+				"'unsafe-inline'",
+				'https://unpkg.com',
+				'https://cdn.jsdelivr.net',
+				'https://js.stripe.com/v3/',
+			],
 			styleSrc: [
 				"'self'",
 				"'unsafe-inline'",
@@ -53,7 +60,13 @@ app.use(
 				'https://unpkg.com',
 				'https://cdn.jsdelivr.net',
 			],
-			connectSrc: ["'self'", 'http://127.0.0.1:3000', 'ws://localhost:51709'],
+			frameSrc: ['https://js.stripe.com'],
+			connectSrc: [
+				"'self'",
+				'http://127.0.0.1:3000',
+				'ws://localhost:51709',
+				'ws://localhost:58641',
+			],
 		},
 	}),
 );
@@ -108,6 +121,7 @@ app.use('/', viewRoutes);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
+app.use('/api/v1/bookings', bookingRouter);
 
 app.all('*', (req, res, next) => {
 	next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

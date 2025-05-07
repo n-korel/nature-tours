@@ -1,7 +1,8 @@
 extends base
 include _reviewCard
 
-//- block append head
+block append head
+    script(src='https://js.stripe.com/v3/')
     //- script(src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js')
     //- link(rel='stylesheet' href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css')
 
@@ -86,37 +87,8 @@ block content
             .cta__content
                 h2.heading-secondary What are you waiting for?
                 p.cta__text= `${tour.duration} days. 1 adventure. Infinite memories. Make it yours today!`
-                button.btn.btn--green.span-all-rows Book tour now!
 
-
-
-//- block append scripts
-//-     script.
-        document.addEventListener('DOMContentLoaded', () => {
-        const mapEl = document.getElementById('map');
-        if (!mapEl) return;
-
-        const locations = JSON.parse(mapEl.dataset.locations);
-        const [lng, lat] = locations[0].coordinates;
-        const map = L.map('map').setView([lat, lng], 8);
-
-        L.tileLayer(
-            'https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=gBM3hM5IVO6FG8pLDrHa', {
-            tileSize: 512,
-            zoomOffset: -1,
-            attribution: '&copy; <a href="https://www.maptiler.com/">MapTiler</a> contributors'
-            }
-        ).addTo(map);
-
-        locations.forEach(loc => {
-            L.marker([loc.coordinates[1], loc.coordinates[0]])
-            .addTo(map)
-            .bindPopup(`<p>Day ${loc.day}: ${loc.description}</p>`, { autoClose: false })
-            .openPopup();
-        });
-
-        const bounds = L.latLngBounds(
-            locations.map(l => [l.coordinates[1], l.coordinates[0]])
-        );
-        map.fitBounds(bounds, { padding: [50, 50] });
-        });
+                if user
+                    button.btn.btn--green.span-all-rows#book-tour(data-tour-id=`${tour.id}`) Book tour now!
+                else
+                    a.btn.btn--green.span-all-rows(href='/login') Log in to book tour
