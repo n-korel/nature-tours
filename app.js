@@ -61,12 +61,7 @@ app.use(
 				'https://cdn.jsdelivr.net',
 			],
 			frameSrc: ['https://js.stripe.com'],
-			connectSrc: [
-				"'self'",
-				'http://127.0.0.1:3000',
-				'ws://localhost:51709',
-				'ws://localhost:58641',
-			],
+			connectSrc: ["'self'", 'http://127.0.0.1:3000'],
 		},
 	}),
 );

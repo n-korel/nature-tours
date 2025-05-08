@@ -2,6 +2,7 @@ import Stripe from 'stripe';
 import Tour from '../models/tourModel.js';
 import catchAsync from '../utils/catchAsync.js';
 import Booking from '../models/bookingModel.js';
+import { createOne, deleteOne, getAll, getOne, updateOne } from './handlerFactory.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -51,3 +52,9 @@ export const createBookingCheckout = catchAsync(async (req, res, next) => {
 
 	res.redirect(req.originalUrl.split('?')[0]);
 });
+
+export const createBooking = createOne(Booking);
+export const getBooking = getOne(Booking);
+export const getAllBooking = getAll(Booking);
+export const updateBooking = updateOne(Booking);
+export const deleteBooking = deleteOne(Booking);
