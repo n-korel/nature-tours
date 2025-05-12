@@ -8,6 +8,7 @@ import mongoSanitize from 'express-mongo-sanitize';
 import xss from 'xss-clean';
 import hpp from 'hpp';
 import cookieParser from 'cookie-parser';
+import compression from 'compression';
 
 import config from './config.js';
 import AppError from './utils/appError.js';
@@ -103,6 +104,8 @@ app.use(
 		],
 	}),
 );
+
+app.use(compression());
 
 // Test middleware
 app.use((req, res, next) => {
