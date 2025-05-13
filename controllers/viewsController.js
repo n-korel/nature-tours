@@ -5,14 +5,21 @@ import AppError from '../utils/appError.js';
 // import AppError from '../utils/appError.js';
 import catchAsync from '../utils/catchAsync.js';
 
+export const alerts = (req, res, next) => {
+	const { alert } = req.query;
+	if (alert === 'booking') {
+		res.locals.alert =
+			"Your booking was successful! Please check your email for a confirmation. If your booking doesn't show up here immdiatly, please come back later.";
+	}
+	next();
+};
+
 export const getOverview = catchAsync(async (req, res, next) => {
 	// 1. Get tour data from colletction
 	const tours = await Tour.find();
 
 	// 2. Build template
-
 	// 3. Render that template using tour data from 1.
-
 	res.status(200).render('overview', {
 		title: 'All Tours',
 		tours,
