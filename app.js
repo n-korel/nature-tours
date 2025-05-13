@@ -9,6 +9,7 @@ import xss from 'xss-clean';
 import hpp from 'hpp';
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
+import cors from 'cors';
 
 import config from './config.js';
 import AppError from './utils/appError.js';
@@ -31,6 +32,10 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 // GLOBAL MIDDLEWARES
+// Implement CORS
+app.use(cors());
+
+app.options('*', cors());
 
 // Serving static files
 // app.use(express.static(`${__dirname}/public`));
