@@ -30,7 +30,8 @@ export const getCheckoutSesion = catchAsync(async (req, res, next) => {
 					product_data: {
 						name: `${tour.name} Tour`,
 						description: tour.summary,
-						images: [`${req.protocol}://${req.get('host')}/img/tours/${tour.imageCover}`],
+						// images: [`${req.protocol}://${req.get('host')}/img/tours/${tour.imageCover}`],
+						images: [`${process.env.FRONTEND_URL}/img/tours/${tour.imageCover}`],
 					},
 				},
 				quantity: 1,
