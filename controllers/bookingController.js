@@ -78,6 +78,20 @@ export const webhookCheckout = (req, res, next) => {
 	res.status(200).json({ received: true });
 };
 
+export const getMyToursBooking = catchAsync(async (req, res, next) => {
+	const bookings = await Booking.find({ user: req.user.id }).populate('tour');
+
+	const tours = bookings.map((booking) => booking.tour);
+
+	res.status(200).json({
+		status: 'success',
+		results: tours.length,
+		data: {
+			tours,
+		},
+	});
+});
+
 export const createBooking = createOne(Booking);
 export const getBooking = getOne(Booking);
 export const getAllBooking = getAll(Booking);

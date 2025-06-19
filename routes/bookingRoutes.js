@@ -6,6 +6,7 @@ import {
 	getAllBooking,
 	getBooking,
 	getCheckoutSesion,
+	getMyToursBooking,
 	updateBooking,
 } from '../controllers/bookingController.js';
 
@@ -14,6 +15,8 @@ const router = express.Router();
 router.use(protect);
 
 router.get('/checkout-session/:tourId', getCheckoutSesion);
+
+router.get('/my-tours', getMyToursBooking);
 
 router.use(restrictTo('admin', 'lead-guide'));
 
