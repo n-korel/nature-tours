@@ -8,42 +8,42 @@ import User from '../models/userModel.js';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const getCheckoutSesion = catchAsync(async (req, res, next) => {
-	// 1. Get the currently booked tour
-	const tour = await Tour.findById(req.params.tourId);
+	try {
+		const tour = await Tour.findById(req.params.tourId);
+		if (!tour) {
+			return res.status(404).json({ status: 'fail', message: 'Tour not found' });
+		}
 
-	// 2. Create checkout session
-	const session = await stripe.checkout.sessions.create({
-		payment_method_types: ['card'],
-		mode: 'payment',
-		success_url: `${process.env.FRONTEND_URL}/tours/${tour.slug}/booking?success=true`,
-		cancel_url: `${process.env.FRONTEND_URL}/tours/${tour.slug}/booking?canceled=true`,
-		// success_url: `${req.protocol}://${req.get('host')}/my-tours/?tour=${req.params.tourId}&user=${req.user.id}&price=${tour.price}`,
-		// success_url: `${req.protocol}://${req.get('host')}/my-tours?alert=booking`,
-		// cancel_url: `${req.protocol}://${req.get('host')}/tour/${tour.slug}`,
-		customer_email: req.user.email,
-		client_reference_id: req.params.tourId,
-		line_items: [
-			{
-				price_data: {
-					currency: 'usd',
-					unit_amount: tour.price * 100,
-					product_data: {
-						name: `${tour.name} Tour`,
-						description: tour.summary,
-						// images: [`${req.protocol}://${req.get('host')}/img/tours/${tour.imageCover}`],
-						images: [`${process.env.FRONTEND_URL}/img/tours/${tour.imageCover}`],
+		const session = await stripe.checkout.sessions.create({
+			payment_method_types: ['card'],
+			mode: 'payment',
+			success_url: `${process.env.FRONTEND_URL}/tours/${tour.slug}/booking?success=true`,
+			cancel_url: `${process.env.FRONTEND_URL}/tours/${tour.slug}/booking?canceled=true`,
+			customer_email: req.user.email,
+			client_reference_id: req.params.tourId,
+			line_items: [
+				{
+					price_data: {
+						currency: 'usd',
+						unit_amount: tour.price * 100,
+						product_data: {
+							name: `${tour.name} Tour`,
+							description: tour.summary,
+							images: [`${process.env.FRONTEND_URL}/img/tours/${tour.imageCover}`],
+						},
 					},
+					quantity: 1,
 				},
-				quantity: 1,
-			},
-		],
-	});
+			],
+		});
 
-	// 3. Create session as response
-	res.status(200).json({
-		status: 'success',
-		session,
-	});
+		res.status(200).json({
+			status: 'success',
+			session,
+		});
+	} catch (err) {
+		return res.status(500).json({ status: 'error', message: 'Could not create Stripe session' });
+	}
 });
 
 const createBookingCheckout = async (session) => {
